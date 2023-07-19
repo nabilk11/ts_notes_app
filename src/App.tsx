@@ -5,6 +5,7 @@ import NewNote from "./pages/NewNote";
 import Home from "./pages/Home";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMemo } from "react";
+import { v4 as uuidV4 } from "uuid"; // must npm i --save-dev @types/uuid as well as uuid
 
 // adds id to existing NoteData
 export type Note = {
@@ -38,7 +39,7 @@ function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
 
   // store notes with tags in cache w/ useMemo - will only recalculate value if one of the dependencies is updated or changes
-  // notesWithTags will now include all data - tags, id, title, markdown, tagIds, 
+  // notesWithTags will now include all data - tags, id, title, markdown, tagIds,
   const notesWithTags = useMemo(() => {
     return notes.map((note) => {
       return {
@@ -47,12 +48,24 @@ function App() {
       };
     });
   }, [notes, tags]);
-  
+
+  // create note function - takes previous notes, and new tags and data - returns an array with prevNotes and new
+  // will save newly created notes within setNotes array, which is being saved in local storage with useLocalStorage hook
+
+  function createNewNote({ tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return [
+        ...prevNotes,
+        { ...data, id: uuidV4(), tagIds: tags.map((tag) => tag.id) },
+      ];
+    });
+  }
+
   return (
     <Container className="my-4">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/new" element={<NewNote />} />
+        <Route path="/new" element={<NewNote onSubmit={createNewNote} />} />
         {/* nested routes */}
         <Route path="/:id">
           <Route index element={<h1>Show</h1>} />

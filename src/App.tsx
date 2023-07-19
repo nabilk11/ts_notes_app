@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import NewNote from "./pages/NewNote";
 import Home from "./pages/Home";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useMemo } from "react";
 
 // adds id to existing NoteData
 export type Note = {
@@ -19,7 +20,8 @@ export type NoteData = {
 
 export type RawNote = {
   id: string;
-};
+} & RawNoteData;
+
 export type RawNoteData = {
   title: string;
   markdown: string;
@@ -34,6 +36,18 @@ export type Tag = {
 function App() {
   const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", []);
+
+  // store notes with tags in cache w/ useMemo - will only recalculate value if one of the dependencies is updated or changes
+  // notesWithTags will now include all data - tags, id, title, markdown, tagIds, 
+  const notesWithTags = useMemo(() => {
+    return notes.map((note) => {
+      return {
+        ...note,
+        tags: tags.filter((tag) => note.tagIds.includes(tag.id)),
+      };
+    });
+  }, [notes, tags]);
+  
   return (
     <Container className="my-4">
       <Routes>

@@ -61,11 +61,27 @@ function App() {
     });
   }
 
+  // add tag function - in order for it to be saved in setTag and this Local Storage
+  // takes prev tags, and adds new one to the array
+
+  function addTag(tag: Tag) {
+    setTags((prev) => [...prev, tag]);
+  }
+
   return (
     <Container className="my-4">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/new" element={<NewNote onSubmit={createNewNote} />} />
+        <Route
+          path="/new"
+          element={
+            <NewNote
+              availableTags={tags}
+              onSubmit={createNewNote}
+              onAddTag={addTag}
+            />
+          }
+        />
         {/* nested routes */}
         <Route path="/:id">
           <Route index element={<h1>Show</h1>} />

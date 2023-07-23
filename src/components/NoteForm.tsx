@@ -1,6 +1,6 @@
 import { FormEvent, SetStateAction, useRef, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable";
 import { NoteData, Tag } from "../App";
 import { v4 as uuidV4 } from "uuid";
@@ -15,6 +15,8 @@ const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  // useNavigate hook to redirect user
+  const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
       markdown: markdownRef.current!.value,
       tags: selectedTags,
     });
+    navigate("..");
   };
 
   return (
@@ -60,7 +63,6 @@ const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
                 }}
                 isMulti
               />
-              <Form.Control required />
             </Form.Group>
           </Col>
         </Row>

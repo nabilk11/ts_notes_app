@@ -7,6 +7,8 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid"; // must npm i --save-dev @types/uuid as well as uuid
 import NoteList from "./components/NoteList";
+import { NoteLayout } from "./components/NoteLayout";
+import Note from "./pages/Note";
 
 // adds id to existing NoteData
 export type Note = {
@@ -87,8 +89,8 @@ function App() {
           }
         />
         {/* nested routes */}
-        <Route path="/:id">
-          <Route index element={<h1>Show</h1>} />
+        <Route path="/:id" element={ <NoteLayout notes={notesWithTags}/> } >
+          <Route index element={<Note /> } />
           <Route path="edit" element={<h1>Edit</h1>} />
         </Route>
         <Route path="*" element={<Navigate to={"/"} />} />

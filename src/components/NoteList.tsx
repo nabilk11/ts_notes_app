@@ -1,19 +1,20 @@
 import { useMemo, useState } from "react";
-import { Button, Card, Col, Form, Row, Stack } from "react-bootstrap";
+import { Badge, Button, Card, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Note, Tag } from "../App";
+import styles from "./NoteList.module.css";
 
 type NoteListProps = {
   availableTags: Tag[];
-  notes: Note[];
+  notes: SimplifiedNote[];
 };
 
-type SimplifiedNoteProps = {
-    availableTags: Tag[]
-    title: string
-    id: string 
-}
+type SimplifiedNote = {
+  tags: Tag[];
+  title: string;
+  id: string;
+};
 
 const NoteList = ({ availableTags, notes }: NoteListProps) => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -95,12 +96,30 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
 
 // NoteCard Component - May move to components folder later on.
 
-function NoteCard({ id, title, tags }: SimplifiedNoteProps) {
-  return <Card as={Link} to={`/${id}`} className={`h-100 text-reset text-decoration-none`}>
-    <Card.Body>
-    {title}
-    </Card.Body>
-  </Card>
+function NoteCard({ id, title, tags }: SimplifiedNote) {
+  return (
+    <Card
+      as={Link}
+      to={`/${id}`}
+      className={`h-100 text-reset text-decoration-none ${styles.card}`}
+    >
+      <Card.Body>
+        <Stack
+          gap={2}
+          className="align-items-center justify-content-center h-100"
+        >
+          <span className="fs-5">{title}</span>
+          {tags.length > 0 && (
+            <Stack gap={1} direction="horizontal" className="justify-content-center flex-wrap">
+                {tags.map(tag => (
+                    <Badge key={tag.id} className="text-truncate" >{tag.label}</Badge>
+                ))}
+            </Stack> 
+          )}
+        </Stack>
+      </Card.Body>
+    </Card>
+  );
 }
 
 export default NoteList;

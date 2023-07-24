@@ -9,6 +9,7 @@ import { v4 as uuidV4 } from "uuid"; // must npm i --save-dev @types/uuid as wel
 import NoteList from "./components/NoteList";
 import { NoteLayout } from "./components/NoteLayout";
 import Note from "./pages/Note";
+import EditNote from "./pages/EditNote";
 
 // adds id to existing NoteData
 export type Note = {
@@ -64,6 +65,19 @@ function App() {
     });
   }
 
+  // update note function
+  function updateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
+
   // add tag function - in order for it to be saved in setTag and this Local Storage
   // takes prev tags, and adds new one to the array
 
@@ -89,9 +103,18 @@ function App() {
           }
         />
         {/* nested routes */}
-        <Route path="/:id" element={ <NoteLayout notes={notesWithTags}/> } >
-          <Route index element={<Note /> } />
-          <Route path="edit" element={<h1>Edit</h1>} />
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+          <Route index element={<Note />} />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                availableTags={tags}
+                onSubmit={updateNote}
+                onAddTag={addTag}
+              />
+            }
+          />
         </Route>
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>

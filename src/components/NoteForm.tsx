@@ -9,12 +9,19 @@ type NoteFormProps = {
   onSubmit: (data: NoteData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
-};
+} & Partial<NoteData>;
 
-const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
+const NoteForm = ({
+  onSubmit,
+  availableTags,
+  onAddTag,
+  title = "",
+  markdown = "",
+  tags = [],
+}: NoteFormProps) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   // useNavigate hook to redirect user
   const navigate = useNavigate();
 
@@ -36,7 +43,7 @@ const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
           <Col>
             <Form.Group controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control ref={titleRef} required />
+              <Form.Control ref={titleRef} defaultValue={title} required />
             </Form.Group>
           </Col>
           <Col>
@@ -68,7 +75,7 @@ const NoteForm = ({ onSubmit, availableTags, onAddTag }: NoteFormProps) => {
         </Row>
         <Form.Group controlId="markdown">
           <Form.Label>Body</Form.Label>
-          <Form.Control ref={markdownRef} required as={"textarea"} rows={15} />
+          <Form.Control ref={markdownRef} defaultValue={markdown} required as={"textarea"} rows={15} />
         </Form.Group>
         <Stack direction="horizontal" gap={2} className="justify-content-end">
           <Button variant="primary" type="submit">

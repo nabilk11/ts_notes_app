@@ -80,9 +80,9 @@ function App() {
 
   // delete note function
   function deleteNote(id: string) {
-    setNotes(prevNotes => {
-      return prevNotes.filter(note => note.id !== id)
-    })
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== id);
+    });
   }
 
   // add tag function - in order for it to be saved in setTag and this Local Storage
@@ -92,12 +92,32 @@ function App() {
     setTags((prev) => [...prev, tag]);
   }
 
+  // update tag function
+  function updateTag(id: string, label: string) {
+    setTags((prevTags) => {
+      return prevTags.map((tag) => {
+        if (tag.id === id) {
+          return { ...tag, label };
+        } else {
+          return tag;
+        }
+      });
+    });
+  }
+
+  // delete tag function
+  function deleteTag(id: string) {
+    setTags((prevTags) => {
+      return prevTags.filter((tag) => tag.id !== id);
+    });
+  }
+
   return (
     <Container className="my-4">
       <Routes>
         <Route
           path="/"
-          element={<NoteList notes={notesWithTags} availableTags={tags} />}
+          element={<NoteList notes={notesWithTags} availableTags={tags} updateTag={updateTag} deleteTag={deleteTag} />}
         />
         <Route
           path="/new"

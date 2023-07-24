@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
-import { Note, Tag } from "../App";
+import { Tag } from "../App";
 import styles from "./NoteList.module.css";
 
 type NoteListProps = {
@@ -62,7 +62,10 @@ const NoteList = ({
     <div>
       <Row className="align-items-center">
         <Col>
-          <h1>Notes</h1>
+          <h1>
+            notes.md <br />
+          </h1>
+          <small className="text-muted">your simple markdown notepad.</small>
         </Col>
         <Col xs="auto">
           <Stack gap={2} direction="horizontal">

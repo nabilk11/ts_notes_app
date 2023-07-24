@@ -1,4 +1,3 @@
-import React from "react";
 import { useNote } from "../components/NoteLayout";
 import { Col, Row, Badge, Stack, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,9 +13,9 @@ const Note = ({ deleteNote }: NoteProps) => {
 
   return (
     <div>
-      <Row className="align-items-center mb-4">
+      <Row className="align-items-center mb-5">
         <Col>
-          <h1>{note.title}</h1>
+          <h1 className="text-muted">{note.title}</h1>
           {note.tags.length > 0 && (
             <Stack gap={1} direction="horizontal" className="flex-wrap">
               {note.tags.map((tag) => (

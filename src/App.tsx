@@ -78,6 +78,13 @@ function App() {
     });
   }
 
+  // delete note function
+  function deleteNote(id: string) {
+    setNotes(prevNotes => {
+      return prevNotes.filter(note => note.id !== id)
+    })
+  }
+
   // add tag function - in order for it to be saved in setTag and this Local Storage
   // takes prev tags, and adds new one to the array
 
@@ -104,7 +111,7 @@ function App() {
         />
         {/* nested routes */}
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<Note />} />
+          <Route index element={<Note deleteNote={deleteNote} />} />
           <Route
             path="edit"
             element={

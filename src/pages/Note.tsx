@@ -1,22 +1,24 @@
 import React from "react";
 import { useNote } from "../components/NoteLayout";
 import { Col, Row, Badge, Stack, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
-const Note = () => {
+type NoteProps = {
+  deleteNote: (id: string) => void;
+};
+
+const Note = ({ deleteNote }: NoteProps) => {
   const note = useNote();
+  const navigate = useNavigate();
+
   return (
     <div>
       <Row className="align-items-center mb-4">
         <Col>
           <h1>{note.title}</h1>
           {note.tags.length > 0 && (
-            <Stack
-              gap={1}
-              direction="horizontal"
-              className="flex-wrap"
-            >
+            <Stack gap={1} direction="horizontal" className="flex-wrap">
               {note.tags.map((tag) => (
                 <Badge key={tag.id} className="text-truncate">
                   {tag.label}
@@ -30,7 +32,15 @@ const Note = () => {
             <Link to={`/${note.id}/edit`}>
               <Button variant="primary">Edit</Button>
             </Link>
-            <Button variant="danger">Delete</Button>
+            <Button
+              onClick={() => {
+                deleteNote(note.id);
+                navigate("/");
+              }}
+              variant="danger"
+            >
+              Delete
+            </Button>
             <Link to={`..`}>
               <Button variant="success">Back</Button>
             </Link>
